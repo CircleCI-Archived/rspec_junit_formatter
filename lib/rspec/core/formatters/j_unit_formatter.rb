@@ -49,7 +49,16 @@ class RSpec::Core::Formatters::JUnitFormatter < RSpec::Core::Formatters::BaseFor
     end
   end
 
+  def file_path example
+    meta = example.metadata
+    while meta[:example_group] do
+      meta = meta[:example_group]
+    end
+    meta[:file_path]
+  end
+
   def example_classname example
-    example.file_path.sub(%r{\.[^/]*\Z}, "").gsub("/", ".").gsub(%r{\A\.+|\.+\Z}, "")
+    fp = file_path example
+    fp.sub(%r{\.[^/]*\Z}, "").gsub("/", ".").gsub(%r{\A\.+|\.+\Z}, "")
   end
 end
