@@ -54,7 +54,8 @@ class RSpec::Core::Formatters::JUnitFormatter < RSpec::Core::Formatters::BaseFor
     while meta[:example_group] do
       meta = meta[:example_group]
     end
-    meta[:file_path]
+    fp = meta[:file_path]
+    fp.start_with?('./') ? fp[2..-1] : fp
   end
 
   def example_classname example
