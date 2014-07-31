@@ -1,8 +1,65 @@
-require 'builder'
-require 'rspec'
+require "time"
 
-require 'rspec/core/formatters/base_formatter'
-require 'rspec/core/formatters/j_unit_formatter'
+require "builder"
+require "rspec"
 
-# Make it easier to use
-RspecJunitFormatter = RSpecJUnitFormatter = RSpec::Core::Formatters::JUnitFormatter
+require "rspec/core/formatters/base_formatter"
+
+# Dumps rspec results as a JUnit XML file.
+# Based on XML schema: http://windyroad.org/dl/Open%20Source/JUnit.xsd
+class RSpecJUnitFormatter < RSpec::Core::Formatters::BaseFormatter
+  # rspec 2 and 3 implements are in separate files.
+
+private
+
+  def xml
+    @xml ||= Builder::XmlMarkup.new target: output, indent: 2
+  end
+
+  def xml_dump
+    xml.instruct!
+    xml.testsuite name: "rspec", tests: example_count, failures: failure_count, errors: 0, time: "%.6f" % duration, timestamp: started.iso8601 do
+      xml.properties
+      xml_dump_examples
+    end
+  end
+
+  def xml_dump_examples
+    examples.each do |example|
+      send :"xml_dump_#{result_of(example)}", example
+    end
+  end
+
+  def xml_dump_passed(example)
+    xml_dump_example(example)
+  end
+
+  def xml_dump_pending(example)
+    xml_dump_example(example) do
+      xml.skipped
+    end
+  end
+
+  def xml_dump_failed(example)
+    exception = exception_for(example)
+    backtrace = formatted_backtrace_for(example)
+
+    xml_dump_example(example) do
+      xml.failure message: exception.to_s, type: exception.class.name do
+        xml.cdata! "#{exception.message}\n#{backtrace.join "\n"}"
+      end
+    end
+  end
+
+  def xml_dump_example(example, &block)
+    xml.testcase classname: classname_for(example), name: description_for(example), time: "%.6f" % duration_for(example), &block
+  end
+end
+
+RspecJunitFormatter = RSpecJUnitFormatter
+
+if RSpec::Version::STRING.start_with? "3."
+  require "rspec_junit_formatter/rspec3"
+else RSpec::Version::STRING.start_with? "2."
+  require "rspec_junit_formatter/rspec2"
+end

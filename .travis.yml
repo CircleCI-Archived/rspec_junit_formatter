@@ -1,0 +1,9 @@
+language: ruby
+rvm:
+  - 2.1.2
+  - 2.0.0
+  - 1.9.3
+gemfile:
+  - gemfiles/Gemfile.rspec2
+  - gemfiles/Gemfile.rspec3
+script: bundle exec rspec
