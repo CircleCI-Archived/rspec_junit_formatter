@@ -3,6 +3,7 @@
 Gem::Specification.new do |s|
   s.name        = "rspec_junit_formatter"
   s.version     = "0.2.0"
+  s.summary     = "RSpec JUnit XML formatter"
 
   s.required_rubygems_version = ">= 1.3.6"
 
