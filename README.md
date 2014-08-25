@@ -1,7 +1,5 @@
 # RSpec JUnit Formatter
 
-[![Build results](http://img.shields.io/travis/sj26/rspec_junit_formatter.svg)](https://travis-ci.org/sj26/rspec_junit_formatter)
-
 [RSpec][rspec] 2 & 3 results that [Jenkins][jenkins] can read. Probably a few other CI servers, too.
 
 Inspired by the work of [Diego Souza][dgvncsz0f] on [RSpec Formatters][dgvncsz0f/rspec_formatters] after frustration with [CI Reporter][ci_reporter].
