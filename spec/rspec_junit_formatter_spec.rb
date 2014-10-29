@@ -26,7 +26,7 @@ describe RspecJunitFormatter do
 
     expect(root.name).to eq "testsuite"
 
-    expect(root["tests"]).to eq "4"
+    expect(root["tests"]).to eq "6"
     expect(root["failures"]).to eq "2"
     expect(root["errors"]).to eq "0"
     expect(Time.parse(root["timestamp"])).to be_within(60).of(Time.now)
@@ -34,17 +34,18 @@ describe RspecJunitFormatter do
   end
 
   it "has some test cases" do
-    expect(testcases.size).to eq 4
+    expect(testcases.size).to eq 6
 
     testcases.each do |testcase|
       expect(testcase["classname"]).not_to be_empty
       expect(testcase["name"]).not_to be_empty
       expect(testcase["time"].to_f).to be > 0
+      expect(testcase["file"]).to match /example_spec\.rb/
     end
   end
 
   it "has a successful test case" do
-    expect(successful_testcases.size).to be 1
+    expect(successful_testcases.size).to be 3
 
     testcase = successful_testcases.first
     expect(testcase).not_to be_nil

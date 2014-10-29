@@ -19,6 +19,18 @@ describe "some example specs" do
     end
   end
 
+  describe "some nested specs" do
+    it "should also succeed" do
+      expect(true).to be_true
+    end
+
+    describe "double nesting" do
+      it "should also succeed" do
+        expect(true).to be_true
+      end
+    end
+  end
+
   if instance_methods.include? :be_truthy
     def be_true
       be_truthy
