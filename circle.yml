@@ -1,0 +1,3 @@
+dependencies:
+  override:
+    - echo My super secret password is "$MY_SUPER_SECRET_PASSWORD"
